@@ -1,0 +1,106 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects } from '../data/projects';
+
+const categories = [
+  { id: 'all', label: 'All' },
+  { id: 'business', label: 'Business' },
+  { id: 'content', label: 'Content' },
+  { id: 'app', label: 'Apps' },
+  { id: 'dataviz', label: 'Data Viz' },
+];
+---
+
+<Layout title="Projects | Jonathan" description="Production-ready templates, tools, and dashboards built with modern web technologies.">
+  <section class="relative pt-32 pb-28 lg:pt-40 lg:pb-32">
+    <!-- Ambient glows -->
+    <div class="ambient-glow w-[500px] h-[500px] bg-blue-600/[0.07] -top-48 -right-48" style="position:absolute;"></div>
+    <div class="ambient-glow w-[400px] h-[400px] bg-violet-400/[0.05] bottom-24 -left-32" style="position:absolute;"></div>
+
+    <div class="max-w-6xl mx-auto px-6 sm:px-8">
+      <!-- Section header -->
+      <div class="max-w-2xl mb-12">
+        <span class="inline-block text-blue-400 text-xs font-semibold tracking-[0.2em] uppercase mb-4">Portfolio</span>
+        <h1 class="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-4">Projects</h1>
+        <p class="text-slate-400 leading-relaxed">Production-ready templates and tools. Each one built with modern stacks and deployed live.</p>
+      </div>
+
+      <!-- Category filters -->
+      <div class="flex flex-wrap gap-2 mb-10" id="category-filters">
+        {categories.map((cat) => (
+          <button
+            data-filter={cat.id}
+            class:list={[
+              'filter-btn text-xs font-semibold px-4 py-2 rounded-lg border transition-all duration-200',
+              cat.id === 'all'
+                ? 'bg-blue-600/20 text-blue-400 border-blue-400/30'
+                : 'bg-slate-900/60 text-slate-400 border-slate-700/50 hover:border-slate-500 hover:text-slate-300',
+            ]}
+          >
+            {cat.label}
+          </button>
+        ))}
+      </div>
+
+      <!-- Project grid -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" id="project-grid">
+        {projects.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+
+      <!-- Back to home -->
+      <div class="mt-16 text-center">
+        <a href="/" class="inline-flex items-center gap-2 text-slate-400 hover:text-white text-sm font-medium transition-colors duration-200">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          Back to Home
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-10 border-t border-white/[0.06]">
+    <div class="max-w-6xl mx-auto px-6 sm:px-8">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-semibold text-white">Jonathan</span>
+          <span class="w-px h-3 bg-slate-800"></span>
+          <span class="text-xs text-slate-500">AI-Augmented Development</span>
+        </div>
+        <p class="text-xs text-slate-600">&copy; 2026 Jonathan. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const filterBtns = document.querySelectorAll('#category-filters .filter-btn');
+    const cards = document.querySelectorAll('#project-grid > div[data-category]');
+
+    filterBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-filter');
+
+        // Update active button styles
+        filterBtns.forEach((b) => {
+          b.classList.remove('bg-blue-600/20', 'text-blue-400', 'border-blue-400/30');
+          b.classList.add('bg-slate-900/60', 'text-slate-400', 'border-slate-700/50');
+        });
+        btn.classList.remove('bg-slate-900/60', 'text-slate-400', 'border-slate-700/50');
+        btn.classList.add('bg-blue-600/20', 'text-blue-400', 'border-blue-400/30');
+
+        // Show/hide cards
+        cards.forEach((card) => {
+          if (filter === 'all' || card.getAttribute('data-category') === filter) {
+            (card as HTMLElement).style.display = '';
+          } else {
+            (card as HTMLElement).style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</Layout>
